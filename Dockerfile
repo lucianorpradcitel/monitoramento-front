@@ -2,10 +2,16 @@
 FROM node:18 AS build
 WORKDIR /app
 
+# Copiar package files
 COPY package*.json ./
-RUN npm install
 
+# Instalar dependências (incluindo devDependencies para o build)
+RUN npm ci
+
+# Copiar código fonte
 COPY . .
+
+# Build da aplicação
 RUN npm run build -- --configuration production
 
 # Etapa 2: Servindo com Nginx
