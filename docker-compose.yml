@@ -1,37 +1,9 @@
+version: '3.8'
 services:
-  monint-frontend:
+  monint-app:
     build:
       context: .
       dockerfile: Dockerfile
-    container_name: monint-frontend
+    ports:
+      - "4200:80"
     restart: unless-stopped
-    networks:
-      - network_traefik
-    labels:
-      # Habilitar Traefik
-      - "traefik.enable=true"
-      
-      # Definir a rede do Traefik
-      - "traefik.docker.network=network_traefik"
-      
-      # Configurar o roteador HTTP
-      - "traefik.http.routers.monint-frontend.rule=Host(`monitoramento-integracoes.citelsoftware.com.br`)"
-      - "traefik.http.routers.monint-frontend.entrypoints=web"
-      
-      # Configurar o roteador HTTPS
-      - "traefik.http.routers.monint-frontend-secure.rule=Host(`monitoramento-integracoes.citelsoftware.com.br`)"
-      - "traefik.http.routers.monint-frontend-secure.entrypoints=websecure"
-      - "traefik.http.routers.monint-frontend-secure.tls=true"
-      - "traefik.http.routers.monint-frontend-secure.tls.certresolver=letsencrypt"
-      
-      # Middleware para redirecionar HTTP para HTTPS
-      - "traefik.http.middlewares.monint-redirect.redirectscheme.scheme=https"
-      - "traefik.http.middlewares.monint-redirect.redirectscheme.permanent=true"
-      - "traefik.http.routers.monint-frontend.middlewares=monint-redirect@docker"
-      
-      # Definir a porta do container
-      - "traefik.http.services.monint-frontend.loadbalancer.server.port=80"
-
-networks:
-  network_traefik:
-    external: true
