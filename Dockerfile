@@ -1,6 +1,9 @@
 # Etapa 1: Build da aplicação Angular
-FROM node:18 AS build
+FROM node:20 AS build
 WORKDIR /app
+
+# Atualizar npm para versão compatível
+RUN npm install -g npm@11.6.2
 
 # Aumentar memória do Node.js
 ENV NODE_OPTIONS=--max_old_space_size=4096
@@ -8,19 +11,19 @@ ENV NODE_OPTIONS=--max_old_space_size=4096
 # Copiar package files
 COPY package*.json ./
 
-# Instalar dependências (incluindo devDependencies para o build)
+# Instalar dependências
 RUN npm ci
 
 # Copiar código fonte
 COPY . .
 
 # Build da aplicação
-RUN npm run build -- --configuration production
+RUN npm run build -- --configuration=production
 
 # Etapa 2: Servindo com Nginx
 FROM nginx:alpine
 
-# Copia o build gerado (CORRIGIDO: adiciona /browser)
+# Copia o build gerado (Angular 17+ usa /browser)
 COPY --from=build /app/dist/monint/browser /usr/share/nginx/html
 
 # Copia config das rotas SPA
