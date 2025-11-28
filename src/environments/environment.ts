@@ -1,4 +1,5 @@
 export const environment = {
   production: false,
-  apiUrl: 'https://monint.citelsoftware.com.br'
+  // Configure para usar o caminho que o NGINX está configurado para "escutar"
+  apiUrl: '/api', 
 };
