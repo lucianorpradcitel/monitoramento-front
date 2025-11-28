@@ -1,4 +1,4 @@
 export const environment = {
   production: false,
-  apiUrl: '/api'
+  apiUrl: 'https://monint.citelsoftware.com.br'
 };
