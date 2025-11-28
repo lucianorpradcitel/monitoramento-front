@@ -7,7 +7,7 @@ import { Observable, of, tap, map } from 'rxjs';
   providedIn: 'root'
 })
 export class AuthService {
-  private baseUrl = environment.apiUrl;
+  private baseUrl = 'https://monint.citelsoftware.com.br';
   private credentials = {
     userName: 'casafuradeiras',
     senha: 'citel13347'
