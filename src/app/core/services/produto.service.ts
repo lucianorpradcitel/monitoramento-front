@@ -9,7 +9,7 @@ import { environment } from '../../../environments/environment';
   providedIn: 'root'
 })
 export class ProdutoService {
-  private baseUrl = 'https://monint.citelsoftware.com.br';
+  private baseUrl = environment.apiUrl;
 
   constructor(private http: HttpClient) {}
 
