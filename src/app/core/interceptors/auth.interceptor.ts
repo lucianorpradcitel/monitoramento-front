@@ -7,11 +7,13 @@ import {
   HttpErrorResponse
 } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
-import { catchError } from 'rxjs/operators';
+import { catchError, switchMap } from 'rxjs/operators';
 import { AuthService } from '../services/auth.service';
 
 @Injectable()
 export class AuthInterceptor implements HttpInterceptor {
+  private isRefreshing = false;
+
   constructor(private authService: AuthService) {}
 
   intercept(
@@ -21,6 +23,7 @@ export class AuthInterceptor implements HttpInterceptor {
     
     // Ignora a rota de autenticação para não criar loop
     if (req.url.includes('/Autenticar')) {
+      console.log('[INTERCEPTOR] Rota de autenticação, não adiciona token');
       return next.handle(req);
     }
 
@@ -43,19 +46,24 @@ export class AuthInterceptor implements HttpInterceptor {
       catchError((error: HttpErrorResponse) => {
         
         // Trata erro 401 (Unauthorized - token inválido/expirado)
-        if (error.status === 401) {
+        if (error.status === 401 && !this.isRefreshing) {
           console.error('%c[INTERCEPTOR] Erro 401: Token inválido ou expirado', 'color: red');
-          this.handleUnauthorized();
+          return this.handle401Error(req, next);
         }
 
         // Trata erro 403 (Forbidden - sem permissão)
         if (error.status === 403) {
-          console.error('%c[INTERCEPTOR] Erro 403: Sem permissão', 'color: red');
+          console.error('%c[INTERCEPTOR] Erro 403: Sem permissão para acessar este recurso', 'color: red');
         }
 
         // Trata erro 500 (Internal Server Error)
         if (error.status === 500) {
-          console.error('%c[INTERCEPTOR] Erro 500: Erro no servidor', 'color: red');
+          console.error('%c[INTERCEPTOR] Erro 500: Erro interno no servidor', 'color: red');
+        }
+
+        // Trata erro de rede
+        if (error.status === 0) {
+          console.error('%c[INTERCEPTOR] Erro de rede: Servidor inacessível', 'color: red');
         }
 
         return throwError(() => error);
@@ -63,17 +71,40 @@ export class AuthInterceptor implements HttpInterceptor {
     );
   }
 
-  private handleUnauthorized(): void {
-    console.log('[INTERCEPTOR] Limpando token e redirecionando...');
+  /**
+   * Tenta renovar o token e reenviar a requisição
+   */
+  private handle401Error(
+    request: HttpRequest<any>,
+    next: HttpHandler
+  ): Observable<HttpEvent<any>> {
     
-    // Limpa o localStorage e redireciona
-    this.authService.logout();
-    
-    // Opcional: Mostrar mensagem ao usuário
-    // Se você usa alguma biblioteca de notificação como ngx-toastr:
-    // this.toastr.warning('Sua sessão expirou. Faça login novamente.', 'Sessão Expirada');
-    
-    // Ou alert simples (não recomendado para produção):
-    // alert('Sua sessão expirou. Você será redirecionado para o login.');
+    this.isRefreshing = true;
+    console.log('%c[INTERCEPTOR] Tentando renovar token...', 'color: orange');
+
+    return this.authService.autenticarAutomaticamente().pipe(
+      switchMap((newToken: string) => {
+        this.isRefreshing = false;
+        console.log('%c[INTERCEPTOR] Token renovado com sucesso!', 'color: green');
+        
+        // Reenvia a requisição original com o novo token
+        const retryReq = request.clone({
+          setHeaders: {
+            Authorization: `Bearer ${newToken}`
+          }
+        });
+        
+        return next.handle(retryReq);
+      }),
+      catchError((error) => {
+        this.isRefreshing = false;
+        console.error('%c[INTERCEPTOR] Falha ao renovar token, fazendo logout...', 'color: red');
+        
+        // Se falhar ao renovar, faz logout
+        this.authService.logout();
+        
+        return throwError(() => error);
+      })
+    );
   }
 }

@@ -57,7 +57,6 @@
               <th>Código Pedido</th>
               <th>Cliente</th>
               <th>Plataforma</th>
-              <th>Status</th>
               <th>Erro</th>
             </tr>
           </thead>
@@ -66,12 +65,6 @@
               <td class="code">{{ pedido.codigoPedido }}</td>
               <td>{{ pedido.cliente.toUpperCase() }}</td>
               <td>{{ pedido.plataforma?.toUpperCase() || 'Plataforma desconhecida' }}</td>
-              <td>
-                <span class="status-badge" [class.error]="pedido.status !== 200">
-                  <span class="status-dot" [class.dot-error]="pedido.status !== 200"></span>
-                  {{ pedido.status }}
-                </span>
-              </td>
               <td class="text-muted">{{ pedido.erro || 'Erro desconhecido' }}</td>
             </tr>
           </tbody>
