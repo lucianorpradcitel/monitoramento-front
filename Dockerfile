@@ -45,8 +45,4 @@ HEALTHCHECK --interval=30s --timeout=3s --start-period=5s --retries=3 \
   CMD wget --quiet --tries=1 --spider http://localhost/ || exit 1
 
 # Inicia Nginx
-<<<<<<< HEAD
 CMD ["nginx", "-g", "daemon off;"]
-=======
-CMD ["nginx", "-g", "daemon off;"]
->>>>>>> 01b985601c48e1d82d935ae99aa40944ad939ff5
