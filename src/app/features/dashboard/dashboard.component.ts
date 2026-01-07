@@ -137,12 +137,12 @@ export class DashboardComponent implements OnInit, OnDestroy {
     this.carregarDados();
     
     // Atualiza a cada 10 segundos
-    /*
+    
     this.intervalId = setInterval(() => {
       console.log('[DASHBOARD] Atualizando dados automaticamente...');
       this.carregarDados();
     }, 10000);
-    */
+    
   }
 
   ngOnDestroy(): void {
