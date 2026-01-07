@@ -1,88 +1,195 @@
 <div class="dashboard-container">
   
   <!-- Header -->
-  <div class="header">
-    <div class="header-content">
-      <div>
-        <img src="assets/rodape-clientes.svg">
-        <p class="subtitle">Acompanhe os logs de integração em tempo real</p>
+  <header class="header">
+    <div class="header-inner">
+      <div class="header-left">
+        <div class="logo-container">
+          <img src="assets/rodape-clientes.svg" alt="Logo">
+        </div>
+        
+        <div class="header-divider"></div>
+        
+        <div class="header-title">
+          <h1>Monitoramento de Integrações</h1>
+          <span>acompanhe os eventos em tempo real</span>
+        </div>
       </div>
-     
+      
+      <div class="status-indicator">
+        <span class="status-dot"></span>
+        Auto-refresh: 10s
+      </div>
     </div>
-  </div>
+  </header>
 
   <!-- Loading -->
   <div *ngIf="loading()" class="loading">
+    <div class="loading-spinner"></div>
     <p>Carregando dados...</p>
   </div>
 
-  <!-- Tabs -->
-  <div *ngIf="!loading()" class="tabs-wrapper">
-    
-    <!-- Tab Navigation -->
-    <div class="tabs-nav">
-      <button 
-        class="tab-btn" 
-        [class.active]="activeTab() === 'pedidos'"
-        (click)="setActiveTab('pedidos')">
-        <span class="tab-icon">📦</span>
-        <span>Pedidos</span>
-        <span *ngIf="pedidosErroCount() > 0" class="badge-count">{{ pedidosErroCount() }}</span>
-      </button>
-
-      <button 
-        class="tab-btn" 
-        [class.active]="activeTab() === 'produtos'"
-        (click)="setActiveTab('produtos')">
-        <span class="tab-icon">🏷️</span>
-        <span>Produtos</span>
-        <span *ngIf="produtosErroCount() > 0" class="badge-count">{{ produtosErroCount() }}</span>
-      </button>
-    </div>
-
-    <!-- Tab Content -->
-    <div class="tab-content-wrapper">
+  <!-- Main Content -->
+  <main *ngIf="!loading()" class="main-content">
+    <div class="content-card">
       
-      <!-- Pedidos Tab -->
-      <div *ngIf="activeTab() === 'pedidos'" class="tab-content">
-        <h2>Pedidos com Erro</h2>
+      <!-- Tabs Header -->
+      <div class="tabs-header">
+        <div class="tabs-nav">
+          <button 
+            class="tab-btn" 
+            [class.active]="activeTab() === 'pedidos'"
+            (click)="setActiveTab('pedidos')">
+            <span class="tab-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path>
+                <polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline>
+                <line x1="12" y1="22.08" x2="12" y2="12"></line>
+              </svg>
+            </span>
+            <span class="tab-text">Pedidos</span>
+            <span *ngIf="pedidosErroCount() > 0" class="tab-badge">{{ pedidosErroCount() }}</span>
+          </button>
+
+          <button 
+            class="tab-btn" 
+            [class.active]="activeTab() === 'produtos'"
+            (click)="setActiveTab('produtos')">
+            <span class="tab-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path>
+                <line x1="7" y1="7" x2="7.01" y2="7"></line>
+              </svg>
+            </span>
+            <span class="tab-text">Produtos</span>
+            <span *ngIf="produtosErroCount() > 0" class="tab-badge">{{ produtosErroCount() }}</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Filters -->
+      <div class="filters-section">
+        <div class="filters-row">
+          <div class="filters-inputs">
+      <div class="filter-pedido">
+              <span class="filter-label">{{ activeTab() === 'pedidos' ? 'Pedido' : 'Produto' }}</span>
+              <input 
+                type="text" 
+                class="filter-input" 
+                [placeholder]="activeTab() === 'pedidos' ? 'Buscar pedido...' : 'Buscar produto...'"
+                [ngModel]="filtroCodigo()"
+                (ngModelChange)="onFiltroCodigoChange($event)">
+            </div>
+            
+      <div class="filter-cliente">
+              <span class="filter-label">Cliente</span>
+              <select 
+                class="filter-select"
+                [ngModel]="filtroCliente()"
+                (ngModelChange)="onFiltroClienteChange($event)">
+                <option value="">Todos os clientes</option>
+                <option *ngFor="let cliente of clientesUnicos()" [value]="cliente">
+                  {{ cliente.toUpperCase() }}
+                </option>
+              </select>
+            </div>
+            
+      <div class="filter-plataforma">
+              <span class="filter-label">Plataforma</span>
+              <select 
+                class="filter-select"
+                [ngModel]="filtroPlataforma()"
+                (ngModelChange)="onFiltroPlataformaChange($event)">
+                <option value="">Todas as plataformas</option>
+                <option *ngFor="let plataforma of plataformasUnicas()" [value]="plataforma">
+                  {{ plataforma }}
+                </option>
+              </select>
+            </div>
+            
+      <div class="filter-erro">
+              <span class="filter-label">Erro</span>
+              <input 
+                type="text" 
+                class="filter-input" 
+                placeholder="Buscar no erro..."
+                [ngModel]="filtroErro()"
+                (ngModelChange)="onFiltroErroChange($event)">
+            </div>
+          </div>
+          
+          <button class="clear-filters-btn" (click)="limparFiltros()">
+            ✕ Limpar filtros
+          </button>
+        </div>
+      </div>
+
+      <!-- Tabela de Pedidos -->
+      <div *ngIf="activeTab() === 'pedidos'" class="table-container">
         
+        <!-- Empty State -->
         <div *ngIf="pedidosComErro().length === 0" class="empty-state">
-          <p>✅ Nenhum pedido com erro hoje!</p>
+          <div class="empty-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="20 6 9 17 4 12"></polyline>
+            </svg>
+          </div>
+          <h3>Nenhum pedido com erro</h3>
+          <p>Todos os pedidos foram processados com sucesso!</p>
         </div>
 
-        <table *ngIf="pedidosComErro().length > 0">
+        <!-- No Results -->
+        <div *ngIf="pedidosComErro().length > 0 && pedidosFiltrados().length === 0" class="no-results">
+          <p>Nenhum pedido encontrado com os filtros aplicados.</p>
+        </div>
+
+        <!-- Table -->
+        <table *ngIf="pedidosFiltrados().length > 0">
           <thead>
             <tr>
-              <th>Código Pedido</th>
+              <th>Pedido</th>
               <th>Cliente</th>
               <th>Plataforma</th>
               <th>Erro</th>
             </tr>
           </thead>
           <tbody>
-            <tr *ngFor="let pedido of pedidosComErro()">
-              <td class="code">{{ pedido.codigoPedido }}</td>
-              <td>{{ pedido.cliente.toUpperCase() }}</td>
-              <td>{{ pedido.plataforma?.toUpperCase() || 'Plataforma desconhecida' }}</td>
-              <td class="text-muted">{{ pedido.erro || 'Erro desconhecido' }}</td>
+            <tr *ngFor="let pedido of pedidosFiltrados()">
+              <td class="code-cell">{{ pedido.codigoPedido }}</td>
+              <td class="client-cell">{{ pedido.cliente.toUpperCase() }}</td>
+              <td class="platform-cell">{{ pedido.plataforma?.toUpperCase() || 'N/A' }}</td>
+              <td class="error-cell">
+                <span class="error-text">{{ pedido.erro || 'Erro desconhecido' }}</span>
+              </td>
             </tr>
           </tbody>
         </table>
       </div>
 
-      <!-- Produtos Tab -->
-      <div *ngIf="activeTab() === 'produtos'" class="tab-content">
-        <h2>Produtos com Erro</h2>
+      <!-- Tabela de Produtos -->
+      <div *ngIf="activeTab() === 'produtos'" class="table-container">
         
+        <!-- Empty State -->
         <div *ngIf="produtosComErro().length === 0" class="empty-state">
-          <p>✅ Nenhum produto com erro hoje!</p>
+          <div class="empty-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="20 6 9 17 4 12"></polyline>
+            </svg>
+          </div>
+          <h3>Nenhum produto com erro</h3>
+          <p>Todos os produtos foram processados com sucesso!</p>
         </div>
 
-        <table *ngIf="produtosComErro().length > 0">
+        <!-- No Results -->
+        <div *ngIf="produtosComErro().length > 0 && produtosFiltrados().length === 0" class="no-results">
+          <p>Nenhum produto encontrado com os filtros aplicados.</p>
+        </div>
+
+        <!-- Table -->
+        <table *ngIf="produtosFiltrados().length > 0">
           <thead>
             <tr>
-              <th>Código Produto</th>
+              <th>Produto</th>
               <th>Cliente</th>
               <th>Plataforma</th>
               <th>Data/Hora</th>
@@ -90,18 +197,31 @@
             </tr>
           </thead>
           <tbody>
-            <tr *ngFor="let produto of produtosComErro()">
-              <td class="code">{{ produto.codigoProduto }}</td>
-              <td>{{ produto.cliente.toUpperCase() }}</td>
-              <td>{{ produto.plataforma.toUpperCase() }}</td>
-              <td class="timestamp">{{ produto.dataErro | date:'dd/MM/yyyy HH:mm' }}</td>            
-              <td class="text-muted">{{ produto.erro.toUpperCase() }}</td>
+            <tr *ngFor="let produto of produtosFiltrados()">
+              <td class="code-cell">{{ produto.codigoProduto }}</td>
+              <td class="client-cell">{{ produto.cliente.toUpperCase() }}</td>
+              <td class="platform-cell">{{ produto.plataforma.toUpperCase() }}</td>
+              <td class="timestamp-cell">{{ produto.dataErro | date:'dd/MM/yyyy HH:mm' }}</td>
+              <td class="error-cell">
+                <span class="error-text">{{ produto.erro }}</span>
+              </td>
             </tr>
           </tbody>
         </table>
       </div>
 
+      <!-- Table Footer -->
+      <div class="table-footer" *ngIf="(activeTab() === 'pedidos' && pedidosComErro().length > 0) || (activeTab() === 'produtos' && produtosComErro().length > 0)">
+        <div class="table-info">
+          Exibindo 
+          <strong>{{ activeTab() === 'pedidos' ? pedidosVisiveis() : produtosVisiveis() }}</strong> 
+          de 
+          <strong>{{ activeTab() === 'pedidos' ? pedidosErroCount() : produtosErroCount() }}</strong> 
+          registros
+        </div>
+      </div>
+
     </div>
-  </div>
+  </main>
 
 </div>
