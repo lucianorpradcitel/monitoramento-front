@@ -126,6 +126,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
   produtosVisiveis = computed(() => this.produtosFiltrados().length);
 
   private intervalId: any;
+  private isFirstLoad = true;
 
   constructor(
     private pedidoService: PedidoService,
@@ -135,14 +136,12 @@ export class DashboardComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     console.log('[DASHBOARD] Inicializando');
     this.carregarDados();
-    
+
     // Atualiza a cada 10 segundos
-    
     this.intervalId = setInterval(() => {
       console.log('[DASHBOARD] Atualizando dados automaticamente...');
       this.carregarDados();
     }, 10000);
-    
   }
 
   ngOnDestroy(): void {
@@ -152,34 +151,69 @@ export class DashboardComponent implements OnInit, OnDestroy {
   }
 
   carregarDados(): void {
-    this.loading.set(true);
-    
+    if (this.isFirstLoad) {
+      this.loading.set(true);
+    }
+
     this.pedidoService.getPendentes().subscribe({
       next: (pedidos: Pedido[]) => {
         console.log('[DASHBOARD] Pedidos carregados:', pedidos);
-        this.pedidosComErro.set(pedidos);
-        this.pedidosErroCount.set(pedidos.length);
+        this.mergePedidos(pedidos);
       },
       error: err => {
         console.error('[DASHBOARD] Erro ao carregar pedidos', err);
-        this.pedidosComErro.set([]);
-        this.pedidosErroCount.set(0);
+        if (this.isFirstLoad) {
+          this.pedidosComErro.set([]);
+          this.pedidosErroCount.set(0);
+        }
       }
     });
 
     this.produtoService.getProdutosComErro().subscribe({
       next: (produtos: Produto[]) => {
         console.log('[DASHBOARD] Produtos carregados:', produtos);
-        this.produtosComErro.set(produtos);
-        this.produtosErroCount.set(produtos.length);
+        this.mergeProdutos(produtos);
       },
       error: err => {
         console.error('[DASHBOARD] Erro ao carregar produtos', err);
-        this.produtosComErro.set([]);
-        this.produtosErroCount.set(0);
+        if (this.isFirstLoad) {
+          this.produtosComErro.set([]);
+          this.produtosErroCount.set(0);
+        }
       },
-      complete: () => this.loading.set(false)
+      complete: () => {
+        if (this.isFirstLoad) {
+          this.loading.set(false);
+          this.isFirstLoad = false;
+        }
+      }
     });
+  }
+
+  private mergePedidos(pedidos: Pedido[]): void {
+    const apiIds = new Set(pedidos.map(p => p.codigoPedido));
+    const current = this.pedidosComErro();
+    const kept = current.filter(p => apiIds.has(p.codigoPedido));
+    const existingIds = new Set(kept.map(p => p.codigoPedido));
+    const novos = pedidos.filter(p => !existingIds.has(p.codigoPedido));
+    const merged = [...kept, ...novos];
+    if (merged.length !== current.length || novos.length > 0) {
+      this.pedidosComErro.set(merged);
+    }
+    this.pedidosErroCount.set(pedidos.length);
+  }
+
+  private mergeProdutos(produtos: Produto[]): void {
+    const apiIds = new Set(produtos.map(p => p.codigoProduto));
+    const current = this.produtosComErro();
+    const kept = current.filter(p => apiIds.has(p.codigoProduto));
+    const existingIds = new Set(kept.map(p => p.codigoProduto));
+    const novos = produtos.filter(p => !existingIds.has(p.codigoProduto));
+    const merged = [...kept, ...novos];
+    if (merged.length !== current.length || novos.length > 0) {
+      this.produtosComErro.set(merged);
+    }
+    this.produtosErroCount.set(produtos.length);
   }
 
   setActiveTab(tab: string): void {

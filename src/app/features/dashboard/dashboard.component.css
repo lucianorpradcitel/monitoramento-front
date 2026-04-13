@@ -7,14 +7,14 @@
 :host {
   display: block;
   min-height: 100vh;
-  background: #0f1419;
+  background: #0d1117;
 }
 
 /* ========== CONTAINER PRINCIPAL ========== */
 .dashboard-container {
   min-height: 100vh;
-  background: #0f1419;
-  color: #e2e8f0;
+  background: #0d1117;
+  color: #c9d1d9;
   font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   display: flex;
   flex-direction: column;
@@ -22,7 +22,7 @@
 
 /* ========== HEADER ========== */
 .header {
-  background: #0f1419;
+  background: #0d1117;
   padding: 24px 0;
   position: sticky;
   top: 0;
@@ -65,14 +65,14 @@
 .header-title h1 {
   font-size: 18px;
   font-weight: 700;
-  color: #e2e8f0;
+  color: #c9d1d9;
   letter-spacing: -0.3px;
   margin: 0;
 }
 
 .header-title span {
   font-size: 13px;
-  color: #64748b;
+  color: #8b949e;
   font-weight: 500;
 }
 
@@ -111,7 +111,7 @@
   justify-content: center;
   gap: 16px;
   padding: 80px;
-  color: #94a3b8;
+  color: #8b949e;
 }
 
 .loading-spinner {
@@ -143,8 +143,8 @@
 }
 
 .content-card {
-  background: #151b23;
-  border: 1px solid rgba(255, 255, 255, 0.06);
+  background: #161b22;
+  border: 1px solid #30363d;
   border-radius: 16px;
   overflow: hidden;
 }
@@ -152,7 +152,7 @@
 /* ========== TABS ========== */
 .tabs-header {
   padding: 20px 28px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  border-bottom: 1px solid #30363d;
 }
 
 .tabs-nav {
@@ -169,7 +169,7 @@
   background: transparent;
   border: none;
   border-radius: 8px;
-  color: #64748b;
+  color: #8b949e;
   font-size: 14px;
   font-weight: 600;
   cursor: pointer;
@@ -178,12 +178,12 @@
 }
 
 .tab-btn:hover {
-  background: #1c242e;
-  color: #94a3b8;
+  background: #21262d;
+  color: #c9d1d9;
 }
 
 .tab-btn.active {
-  background: linear-gradient(135deg, #7c93c3 0%, #5a7a9a 100%);
+  background: #1f6feb;
   color: white;
 }
 
@@ -201,11 +201,11 @@
 }
 
 .tab-btn:not(.active) .tab-icon svg {
-  stroke: #64748b;
+  stroke: #8b949e;
 }
 
 .tab-btn:hover:not(.active) .tab-icon svg {
-  stroke: #94a3b8;
+  stroke: #c9d1d9;
 }
 
 .tab-btn.active .tab-icon svg {
@@ -225,15 +225,15 @@
 }
 
 .tab-btn:not(.active) .tab-badge {
-  background: rgba(232, 124, 124, 0.12);
-  color: #e87c7c;
+  background: rgba(248, 81, 73, 0.15);
+  color: #f85149;
 }
 
 /* ========== FILTERS ========== */
 .filters-section {
   padding: 24px 28px;
-  background: #1c242e;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  background: #21262d;
+  border-bottom: 1px solid #30363d;
 }
 
 .filters-row {
@@ -270,8 +270,8 @@
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.5px;
-  color: #64748b;
-  background: #1c242e;
+  color: #8b949e;
+  background: #21262d;
   padding: 0 8px;
   z-index: 1;
 }
@@ -280,10 +280,10 @@
 .filter-select {
   width: 100%;
   padding: 14px 16px;
-  background: #151b23;
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: #161b22;
+  border: 1px solid #30363d;
   border-radius: 8px;
-  color: #e2e8f0;
+  color: #c9d1d9;
   font-size: 14px;
   font-family: inherit;
   transition: all 0.2s ease;
@@ -301,28 +301,28 @@
 }
 
 .filter-select option {
-  background: #151b23;
-  color: #e2e8f0;
+  background: #161b22;
+  color: #c9d1d9;
   padding: 10px;
 }
 
 .filter-input::placeholder {
-  color: #64748b;
+  color: #8b949e;
 }
 
 .filter-input:focus,
 .filter-select:focus {
   outline: none;
-  border-color: #8b9dc3;
-  box-shadow: 0 0 0 3px rgba(139, 157, 195, 0.12);
+  border-color: #1f6feb;
+  box-shadow: 0 0 0 3px rgba(31, 111, 235, 0.15);
 }
 
 .clear-filters-btn {
   padding: 14px 20px;
   background: transparent;
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  border: 1px solid #30363d;
   border-radius: 8px;
-  color: #64748b;
+  color: #8b949e;
   font-size: 14px;
   font-weight: 600;
   cursor: pointer;
@@ -332,9 +332,9 @@
 }
 
 .clear-filters-btn:hover {
-  background: rgba(232, 124, 124, 0.12);
+  background: rgba(248, 81, 73, 0.12);
   border-color: transparent;
-  color: #e87c7c;
+  color: #f85149;
 }
 
 /* ========== TABLE ========== */
@@ -349,7 +349,7 @@ table {
 }
 
 thead {
-  background: #0f1419;
+  background: #0d1117;
 }
 
 thead th {
@@ -359,14 +359,14 @@ thead th {
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.5px;
-  color: #64748b;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  color: #8b949e;
+  border-bottom: 1px solid #30363d;
   white-space: nowrap;
 }
 
 tbody tr {
   transition: background 0.15s ease;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  border-bottom: 1px solid #30363d;
 }
 
 tbody tr:last-child {
@@ -374,13 +374,13 @@ tbody tr:last-child {
 }
 
 tbody tr:hover {
-  background: #1c242e;
+  background: #21262d;
 }
 
 tbody td {
   padding: 18px 28px;
   font-size: 14px;
-  color: #e2e8f0;
+  color: #c9d1d9;
 }
 
 /* Células da tabela */
@@ -388,19 +388,19 @@ tbody td {
   font-family: 'SF Mono', 'Fira Code', 'Consolas', monospace;
   font-size: 15px;
   font-weight: 600;
-  color: #a8bdd4;
+  color: #79c0ff;
 }
 
 .client-cell {
   font-size: 14px;
   font-weight: 600;
-  color: #e2e8f0;
+  color: #c9d1d9;
 }
 
 .platform-cell {
   font-size: 14px;
   font-weight: 600;
-  color: #94a3b8;
+  color: #8b949e;
   text-transform: uppercase;
   letter-spacing: 0.3px;
 }
@@ -408,14 +408,14 @@ tbody td {
 .timestamp-cell {
   font-family: 'SF Mono', 'Fira Code', 'Consolas', monospace;
   font-size: 14px;
-  color: #64748b;
+  color: #8b949e;
   white-space: nowrap;
 }
 
 .error-cell {
   max-width: 450px;
   font-size: 14px;
-  color: #94a3b8;
+  color: #8b949e;
   line-height: 1.6;
 }
 
@@ -456,13 +456,13 @@ tbody td {
 .empty-state h3 {
   font-size: 18px;
   font-weight: 700;
-  color: #e2e8f0;
+  color: #c9d1d9;
   margin-bottom: 6px;
 }
 
 .empty-state p {
   font-size: 14px;
-  color: #64748b;
+  color: #8b949e;
   margin: 0;
 }
 
@@ -474,24 +474,24 @@ tbody td {
 
 .no-results p {
   font-size: 14px;
-  color: #64748b;
+  color: #8b949e;
   margin: 0;
 }
 
 /* ========== TABLE FOOTER ========== */
 .table-footer {
   padding: 16px 28px;
-  border-top: 1px solid rgba(255, 255, 255, 0.06);
-  background: #0f1419;
+  border-top: 1px solid #30363d;
+  background: #0d1117;
 }
 
 .table-info {
   font-size: 14px;
-  color: #64748b;
+  color: #8b949e;
 }
 
 .table-info strong {
-  color: #94a3b8;
+  color: #c9d1d9;
   font-weight: 600;
 }
 
@@ -502,11 +502,11 @@ tbody td {
 }
 
 .table-container::-webkit-scrollbar-track {
-  background: #0f1419;
+  background: #0d1117;
 }
 
 .table-container::-webkit-scrollbar-thumb {
-  background: #232d3b;
+  background: #30363d;
   border-radius: 4px;
 }
 
