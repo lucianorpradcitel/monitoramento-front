@@ -14,7 +14,7 @@ export class PedidoService {
   constructor(private http: HttpClient) {}
 
   getPendentes(): Observable<Pedido[]> {
-    return this.http.get<Pedido[]>(`${this.baseUrl}/pendentes`);
+    return this.http.get<Pedido[]>(`${this.baseUrl}/pendentes?status=2`);
   }
 
   registrarPedido(data: PedidoDTO): Observable<Pedido> {
