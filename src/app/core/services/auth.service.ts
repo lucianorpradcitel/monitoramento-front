@@ -10,8 +10,8 @@ import { Observable, of, tap, map, catchError, throwError } from 'rxjs';
 export class AuthService {
   private baseUrl = environment.apiUrl;
   private credentials = {
-    userName: 'casafuradeiras',
-    senha: 'citel13347'
+    userName: 'Citel',
+    senha: 'citel@13347'
   };
 
   constructor(
