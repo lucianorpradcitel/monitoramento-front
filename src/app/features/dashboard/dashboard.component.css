@@ -397,6 +397,12 @@ tbody td {
   color: #c9d1d9;
 }
 
+.routine-cell {
+  font-size: 14px;
+  font-weight: 600;
+  color: #c9d1d9;
+}
+
 .platform-cell {
   font-size: 14px;
   font-weight: 600;

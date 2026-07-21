@@ -5,4 +5,5 @@ export interface Produto {
     plataforma: string;
     status: number;
     erro: string;
+    rotina: string
 }

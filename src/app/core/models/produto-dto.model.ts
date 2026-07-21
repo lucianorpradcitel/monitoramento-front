@@ -5,4 +5,5 @@ export interface ProdutoDTO {
     plataforma: string;
     status: number;
     erro: string;
+    rotina: string
 }

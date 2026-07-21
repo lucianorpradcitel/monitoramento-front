@@ -151,6 +151,7 @@
               <th>Cliente</th>
               <th>Plataforma</th>
               <th>Erro</th>
+              <th>Rotina</th>
             </tr>
           </thead>
           <tbody>
@@ -159,8 +160,9 @@
               <td class="client-cell">{{ pedido.cliente.toUpperCase() }}</td>
               <td class="platform-cell">{{ pedido.plataforma?.toUpperCase() || 'N/A' }}</td>
               <td class="error-cell">
-                <span class="error-text">{{ pedido.erro || 'Erro desconhecido' }}</span>
+                <span class="error-text">{{ pedido.erro || 'Erro desconhecido' }}</span>                
               </td>
+              <td class="routine-cell">{{pedido.rotina?.toUpperCase() || 'Não Informado'}}</td>
             </tr>
           </tbody>
         </table>
@@ -194,6 +196,7 @@
               <th>Plataforma</th>
               <th>Data/Hora</th>
               <th>Erro</th>
+              <th>Rotina</th>
             </tr>
           </thead>
           <tbody>
@@ -205,6 +208,7 @@
               <td class="error-cell">
                 <span class="error-text">{{ produto.erro }}</span>
               </td>
+              <td class="routine-cell">{{produto.rotina?.toUpperCase() || 'N/A' }}</td>
             </tr>
           </tbody>
         </table>
